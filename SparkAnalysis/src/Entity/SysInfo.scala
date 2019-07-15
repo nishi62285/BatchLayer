@@ -1,3 +1,3 @@
 package Entity
 
-case class SysInfo(date:String,time:String,type1:String,type2:String,instruction:String);
+case class SysInfo(event_date:String,event_time:String,type1:String,type2:String,instruction:String);

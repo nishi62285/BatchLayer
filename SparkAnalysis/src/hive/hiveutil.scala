@@ -2,14 +2,17 @@ package hive
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
 import Entity._
+import org.apache.spark.sql.SaveMode
 class hiveutil {
   
-  def SaveToHive(sysInfoRDD:RDD[SysInfo],sparkss : SparkSession)
+  def SaveToHive(partitionColumns:Array[String],sysInfoRDD:RDD[SysInfo],sparkss : SparkSession)
   {
-    import sparkss.implicits._
-    val n =sysInfoRDD.toDF()
-    n.createOrReplaceTempView("sysinfo")
-    n.write.partitionBy("type2").format("orc").saveAsTable("sysinfomaster_par");
-    n.write.format("orc").saveAsTable("sysinfomaster");
+   println("Saving Data to Hive") 
+    import sparkss.implicits._    
+    val n = sysInfoRDD.toDF()
+    n.write.partitionBy("event_date","type1").mode(SaveMode.Append).option("path","/BatchData/MasterText/").saveAsTable("attemp4");
+    println("Saved Data to Hive")
+    //n.write.format("orc").saveAsTable("/type1/orc/sysinfomaster");
+    //n.write.format("paraquet").saveAsTable("/type1/parquet/sysinfomaster");
   }
 }
